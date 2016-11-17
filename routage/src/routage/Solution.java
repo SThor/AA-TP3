@@ -1,14 +1,11 @@
 package routage;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class Solution {
 	private Set<Camion> camions;
 	private List<Client> monde;
+	private final static int CAPACITE = 100;
 	
 	public Solution(List<Client> monde){
 		this.monde = monde;
@@ -23,10 +20,18 @@ public class Solution {
 		Random rand = new Random();
 		//création d'une liste des clients en ordre aléatoire
 		List<Client> clientsAleatoire = new LinkedList<>();
-		for (Client client : monde) {
-			clientsAleatoire.add(rand.nextInt(),client);
+		clientsAleatoire.addAll(monde);
+		Collections.shuffle(clientsAleatoire);
+		//attribution d'un nombre aléatoire de cette liste à un camion tant qu'on n'a pas fini la liste
+		while(!clientsAleatoire.isEmpty()){
+			int circuitLength = rand.nextInt();
+			List<Client> circuit = new ArrayList<>();
+			for (int i = 0; i < circuitLength; i++) {
+				circuit.add(clientsAleatoire.get(i));
+			}
+			camions.add(new Camion(circuit,CAPACITE));
 		}
-		//attribution d'un nombre aléatoire de cette liste un camion tant qu'on n'a pas fini la liste
+
 	}
 	
 	public double tempsTotalDeParcours(){
