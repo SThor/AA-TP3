@@ -5,7 +5,12 @@ import java.util.*;
 public class Solution {
 	private Set<Camion> camions;
 	private List<Client> monde;
-	private final static int CAPACITE = 100;
+	private final static int CAPACITE_DEFAULT = 100;
+	private int capacite = CAPACITE_DEFAULT;
+	
+	public Solution(){
+		
+	};
 	
 	public Solution(List<Client> monde){
 		this.monde = monde;
@@ -29,7 +34,7 @@ public class Solution {
 			for (int i = 0; i < circuitLength; i++) {
 				circuit.add(clientsAleatoire.get(i));
 			}
-			camions.add(new Camion(circuit,CAPACITE));
+			camions.add(new Camion(circuit,CAPACITE_DEFAULT));
 		}
 	}
 	
@@ -53,5 +58,13 @@ public class Solution {
 		}
 		clientsDesservis.add(monde.get(0)); //Ajout du dépôt
 		return clientsDesservis.containsAll(monde) && monde.containsAll(clientsDesservis);
+	}
+	
+	public void setCapacite(int capacite){
+		this.capacite = capacite;
+	}
+	
+	public void setMonde(List<Client> monde){
+		this.monde = monde;
 	}
 }

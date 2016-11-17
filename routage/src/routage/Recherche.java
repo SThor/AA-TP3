@@ -17,8 +17,6 @@ public class Recherche {
 		return null;
 	}
 	
-	public void lecture(){
-		
-	}
+	
 
 }

@@ -1,6 +1,6 @@
 package routage;
 
-import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 public class Camion {
@@ -18,15 +18,15 @@ public class Camion {
 	}
 	
 	public double getDureeTrajet(List<Client> monde){
-		Point depot = monde.get(0).getCoordonnees();
-		Point premierClient = circuit.get(0).getCoordonnees(); 
-		Point dernierClient = circuit.get(circuit.size()-1).getCoordonnees();
+		Point2D.Double depot = monde.get(0).getCoordonnees();
+		Point2D.Double premierClient = circuit.get(0).getCoordonnees(); 
+		Point2D.Double dernierClient = circuit.get(circuit.size()-1).getCoordonnees();
 		
 		double duree = depot.distance(premierClient) + dernierClient.distance(depot);
 		
 		for (int i = 0; i < circuit.size()-1; i++) {
-			Point clientA = circuit.get(i).getCoordonnees();
-			Point clientB = circuit.get(i+1).getCoordonnees();
+			Point2D.Double clientA = circuit.get(i).getCoordonnees();
+			Point2D.Double clientB = circuit.get(i+1).getCoordonnees();
 			duree+=clientA.distance(clientB);			
 		}
 		return duree;
