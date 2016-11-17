@@ -6,6 +6,8 @@ package routage;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -17,21 +19,22 @@ import java.util.Scanner;
  * Classe de lecture du fichier et creation objets
  */
 public class Lecture {
-	private File fichier ;				// Fichier contenant le Solution
+	private Path fichier ;				// Fichier contenant le Solution
 	
 	/**
 	 * Constructeur
 	 * @param fichier contenant les informations
 	 */
-	public Lecture(File fichier) {
+	public Lecture(Path fichier) {
 		this.fichier = fichier ;
 	}
 	
 	/**
 	 * Cree la liste de clients a livrer
 	 * @return liste de clients a livrer
+	 * @throws IOException 
 	 */
-	public Solution lire() {
+	public Solution lire() throws IOException {
 		String id ;
 		float x ;
 		float y ;
