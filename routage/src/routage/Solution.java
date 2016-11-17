@@ -27,6 +27,7 @@ public class Solution {
 			clientsAleatoire.add(rand.nextInt(),client);
 		}
 		//attribution d'un nombre aléatoire de cette liste un camion tant qu'on n'a pas fini la liste
+		
 	}
 	
 	public double tempsTotalDeParcours(){
