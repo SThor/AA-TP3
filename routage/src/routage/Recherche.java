@@ -3,8 +3,10 @@ package routage;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.List;
 
 public class Recherche {
+	public static List<Client> monde;
 	
 	/**
 	 * 
@@ -16,18 +18,4 @@ public class Recherche {
 	public Solution calculerSolution(int nbRedemarrage, int nbIteRechLocale, int choixVoisin){
 		return null;
 	}
-	
-	public static void main(String[] args){
-		Path fichier = FileSystems.getDefault().getPath("ref","routage_a1.txt");
-		try {
-			Solution solution = new Lecture(fichier).lire();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	
-
 }

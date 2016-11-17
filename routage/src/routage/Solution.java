@@ -67,4 +67,8 @@ public class Solution {
 	public void setMonde(List<Client> monde){
 		this.monde = monde;
 	}
+
+	public List<Client> getMonde() {
+		return monde;
+	}
 }

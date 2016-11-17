@@ -19,13 +19,13 @@ import java.util.Scanner;
  * Classe de lecture du fichier et creation objets
  */
 public class Lecture {
-	private Path fichier ;				// Fichier contenant le Solution
+	private File fichier ;				// Fichier contenant le Solution
 	
 	/**
 	 * Constructeur
 	 * @param fichier contenant les informations
 	 */
-	public Lecture(Path fichier) {
+	public Lecture(File fichier) {
 		this.fichier = fichier ;
 	}
 	
@@ -34,7 +34,7 @@ public class Lecture {
 	 * @return liste de clients a livrer
 	 * @throws IOException 
 	 */
-	public Solution lire() throws IOException {
+	public List<Client> lire() throws IOException {
 		String id ;
 		float x ;
 		float y ;
@@ -79,9 +79,8 @@ public class Lecture {
 			System.out.println(id+" "+x+" "+y+" "+quantite+" "+tmin+" "+tmax+" "+duree);
 			listeClients.add(new Client(id,new Point2D.Double(x,y),tmin,tmax,quantite,duree)) ;
 		}
-		
-		Solution.setMonde(listeClients);
-		return Solution ;
+
+		return listeClients ;
 	}
 }
 
