@@ -2,6 +2,7 @@ package routage;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -9,7 +10,7 @@ public class Camion {
 	private List<Client> circuit;
 	private int capacite;
 	private Color color;
-	
+
 	public Camion(List<Client> circuit, int capacite) {
 		super();
 		this.circuit = circuit;
@@ -17,21 +18,28 @@ public class Camion {
 		this.color = randomColor();
 	}
 
+	public Camion(int capacite){
+		super();
+		this.circuit = new ArrayList<>();
+		this.capacite = capacite;
+		this.color = randomColor();
+	}
+
 	public List<Client> getCircuit() {
 		return circuit;
 	}
-	
-	public double getDureeTrajet(List<Client> monde){
+
+	public double getDureeTrajet(List<Client> monde) {
 		Point2D.Double depot = monde.get(0).getCoordonnees();
-		Point2D.Double premierClient = circuit.get(0).getCoordonnees(); 
-		Point2D.Double dernierClient = circuit.get(circuit.size()-1).getCoordonnees();
-		
+		Point2D.Double premierClient = circuit.get(0).getCoordonnees();
+		Point2D.Double dernierClient = circuit.get(circuit.size() - 1).getCoordonnees();
+
 		double duree = depot.distance(premierClient) + dernierClient.distance(depot);
-		
-		for (int i = 0; i < circuit.size()-1; i++) {
+
+		for (int i = 0; i < circuit.size() - 1; i++) {
 			Point2D.Double clientA = circuit.get(i).getCoordonnees();
-			Point2D.Double clientB = circuit.get(i+1).getCoordonnees();
-			duree+=clientA.distance(clientB);			
+			Point2D.Double clientB = circuit.get(i + 1).getCoordonnees();
+			duree += clientA.distance(clientB);
 		}
 		return duree;
 	}

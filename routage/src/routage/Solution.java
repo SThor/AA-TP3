@@ -6,21 +6,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-public class Solution {
+public class Solution implements Comparable<Solution> {
+	public static final int MEILLEUR_PARMIS_TOUS = 0;
+	public static final int PREMIER_AMELIORANT = -1;
+	private final static int CAPACITE_DEFAULT = 100;
+	private static final int NOUVEAU_CAMION = -1;
 	private List<Camion> camions;
 	private List<Client> monde;
 	private Map<Client, Camion> repartition;
-	private final static int CAPACITE_DEFAULT = 100;
 	private int capacite = CAPACITE_DEFAULT;
-	public static final int MEILLEUR_PARMIS_TOUS = 0;
-	public static final int PREMIER_AMELIORANT = -1;
+	private int MAX_DEFAULT_RANDOM_CIRCUIT_LENGTH = 19;
 
 	public Solution() {
 		this.camions = new ArrayList<>();
 		this.repartition = new HashMap<>();
 	}
-
-	;
 
 	public Solution(List<Client> monde) {
 		this();
@@ -35,10 +35,6 @@ public class Solution {
 		return copie;
 	}
 
-	public void setCamions(List<Camion> camions) {
-		this.camions = camions;
-	}
-
 	public Map<Client, Camion> getRepartition() {
 		return repartition;
 	}
@@ -47,16 +43,20 @@ public class Solution {
 		this.repartition = repartition;
 	}
 
-	public void setMonde(List<Client> monde) {
-		this.monde = monde;
-	}
-
 	public List<Client> getMonde() {
 		return monde;
 	}
 
+	public void setMonde(List<Client> monde) {
+		this.monde = monde;
+	}
+
 	public List<Camion> getCamions() {
 		return camions;
+	}
+
+	public void setCamions(List<Camion> camions) {
+		this.camions = camions;
 	}
 
 	public void setCapacite(int capacite) {
@@ -156,7 +156,7 @@ public class Solution {
 		//attribution d'un nombre aléatoire de cette liste à un camion tant qu'on n'a pas fini la liste
 		int i = 0;
 		while (i < clientsAleatoire.size()) {
-			int circuitLength = rand.nextInt(19) + 1;
+			int circuitLength = rand.nextInt(MAX_DEFAULT_RANDOM_CIRCUIT_LENGTH) + 1;
 			List<Client> circuit = new ArrayList<>();
 			for (int j = 0; j < circuitLength && i < clientsAleatoire.size(); j++) {
 				circuit.add(clientsAleatoire.get(i));
@@ -190,7 +190,11 @@ public class Solution {
 			}
 		}
 		clientsDesservis.add(monde.get(0)); //Ajout du dépôt
-		return clientsDesservis.containsAll(monde) && monde.containsAll(clientsDesservis) && repartition.keySet().containsAll(monde) && repartition.values().containsAll(camions) && camions.containsAll(repartition.values());
+		return clientsDesservis.containsAll(monde) &&
+				monde.containsAll(clientsDesservis)/* &&
+				repartition.keySet().containsAll(monde) &&
+				repartition.values().containsAll(camions) &&
+				camions.containsAll(repartition.values())*/;
 	}
 
 	/**
@@ -199,14 +203,40 @@ public class Solution {
 	 * @param choixVoisin     meilleur parmis tous : 0, premier ameliorant : -1, meilleur parmis echantillon : taille de l'echantillon
 	 * @return
 	 */
-	public void calculerSolution(int nbRedemarrage, int nbIteRechLocale, int choixVoisin) {
+	public Solution calculerSolution(int nbRedemarrage, int nbIteRechLocale, int choixVoisin) {
+		TreeSet<Solution> solutions = new TreeSet<>();
 		for (int i = 0; i < nbRedemarrage; i++) {
-			iteration();
+			solutions.add(recherche(nbIteRechLocale, choixVoisin));
 		}
+		return solutions.first();
 	}
 
-	public void iteration() {
-		random();
+	public Solution recherche(int nbIteRechLocale, int choixVoisin) {
+		TreeSet<Solution> solutions = new TreeSet<>();
+		for (int i = 0; i < nbIteRechLocale; i++) {
+			solutions.add(iteration(choixVoisin, null)); //TODO
+		}
+		return solutions.first();
+	}
+
+	private Solution iteration(int choixVoisin, Solution actuelle) {
+		Solution solution;
+		switch (choixVoisin) {
+			case MEILLEUR_PARMIS_TOUS:
+				solution = genAllVoisins().first();
+				break;
+			case PREMIER_AMELIORANT:
+				Solution voisin = genRandomVoisin();
+				while (actuelle.compareTo(voisin) >= 0) { //tant que le voisin généré n'améliore pas la solution actuelle
+					voisin = genRandomVoisin();
+				}
+				solution = voisin;
+				break;
+			default:
+				solution = genRandomVoisins(choixVoisin).first();
+				break;
+		}
+		return solution;
 	}
 
 	public Solution genVoisinChange(int camion, int client) {
@@ -223,13 +253,10 @@ public class Solution {
 		int n = rand.nextInt(2);
 		switch (n) {
 			case 0:
-				System.out.println("ajoute Camion");
 				return genVoisinAjouteCamion(rand.nextInt(monde.size()));
 			case 1:
-				System.out.println("bouge client");
 				return genVoisinBougeClient(rand.nextInt(monde.size()), rand.nextInt(camions.size()));
 			default:
-				System.err.println("Pas de méthode pour n=" + n);
 				return null;
 		}
 	}
@@ -237,69 +264,28 @@ public class Solution {
 	public Solution genRandomVoisinAjouteCamion() {
 		Random rand = new Random();
 		System.out.println("ajoute Camion");
-		return genVoisinAjouteCamion(rand.nextInt(monde.size()));
+		return genVoisinAjouteCamion(rand.nextInt(monde.size() - 1) + 1);
 	}
 
 	public Solution genRandomVoisinBougeClient() {
 		Random rand = new Random();
-		System.out.println("bouge client");
-		return genVoisinBougeClient(rand.nextInt(monde.size()), rand.nextInt(camions.size()));
+		return genVoisinBougeClient(rand.nextInt(monde.size() - 1) + 1, rand.nextInt(camions.size()));
 	}
 
 	private Solution genVoisinAjouteCamion(int idClient) {
 		Solution voisin = copie(this);
-
-		Client client = voisin.monde.get(idClient);
-		Camion ancienCamion = voisin.repartition.get(client);
-		List<Client> circuit = new ArrayList<>();
-		circuit.add(client);
-		Camion nouveauCamion = new Camion(circuit, CAPACITE_DEFAULT);
-
-		ancienCamion.getCircuit().remove(client);
-		voisin.camions.add(nouveauCamion);
-		voisin.repartition.put(client, nouveauCamion);
-
-		if (ancienCamion.getCircuit().isEmpty()) {
-			voisin.camions.remove(ancienCamion);
-		}
-
-		return voisin;
-	}
-
-	private Solution genVoisinRetireCamion(int idCamionSource, int idCamionDestination) {
-		Solution voisin = copie(this);
-
-		Camion camionSource = voisin.camions.get(idCamionSource);
-		Camion camionDestination = voisin.camions.get(idCamionDestination);
-
-		for (Client client : camionSource.getCircuit()) {
-			camionDestination.getCircuit().add(client);
-			voisin.repartition.put(client, camionDestination);
-		}
-		voisin.camions.remove(camionSource);
-
+		voisin.bougerClient(idClient, NOUVEAU_CAMION);
 		return voisin;
 	}
 
 	private Solution genVoisinBougeClient(int idClient, int idCamionDestination) {
 		Solution voisin = copie(this);
-
-		Client client = voisin.monde.get(idClient);
-		Camion ancienCamion = voisin.repartition.get(client);
-		Camion camionDestination = voisin.camions.get(idCamionDestination);
-
-		camionDestination.getCircuit().add(client);
-		ancienCamion.getCircuit().remove(client);
-		voisin.repartition.put(client, camionDestination);
-		if (ancienCamion.getCircuit().isEmpty()) {
-			voisin.camions.remove(ancienCamion);
-		}
-
+		voisin.bougerClient(idClient, idCamionDestination);
 		return voisin;
 	}
 
-	public Set<Solution> genRandomVoisins(int nbVoisins) {
-		Set<Solution> voisins = new HashSet<>();
+	public TreeSet<Solution> genRandomVoisins(int nbVoisins) {
+		TreeSet<Solution> voisins = new TreeSet<>();
 
 		while (voisins.size() < nbVoisins) {
 			Solution voisin = genRandomVoisin();
@@ -309,16 +295,16 @@ public class Solution {
 		return voisins;
 	}
 
-	public Set<Solution> genAllVoisins(){
-		Set<Solution> voisins = new HashSet<>();
+	public TreeSet<Solution> genAllVoisins() {
+		TreeSet<Solution> voisins = new TreeSet<>();
 
 		for (int i = 1; i < monde.size(); i++) {
 			voisins.add(genVoisinAjouteCamion(i));
 		}
 		for (int i = 0; i < camions.size(); i++) {
 			for (int j = 0; j < camions.size(); j++) {
-				if(i!=j){
-					voisins.add(genVoisinBougeClient(i,j));
+				if (i != j) {
+					voisins.add(genVoisinBougeClient(i, j));
 				}
 			}
 		}
@@ -328,5 +314,46 @@ public class Solution {
 
 	public boolean isSet() {
 		return !camions.isEmpty();
+	}
+
+	@Override
+	public int compareTo(Solution s) {
+		return (int) (s.tempsTotalDeParcours() - tempsTotalDeParcours());
+	}
+
+	private void retirerCamionsVides() {
+		for (Iterator<Camion> it = camions.iterator(); it.hasNext();) {
+			Camion camion = it.next();
+			if (camion.getCircuit().isEmpty()) {
+				it.remove();
+				System.out.println("là je supprime un camion");
+			}
+		}
+	}
+
+	private void bougerClient(int idClient, int idCamionDestination) {
+		Client client = monde.get(idClient);
+		Camion ancienCamion = repartition.get(client);
+		Camion camionDestination;
+
+		if (idCamionDestination < camions.size() && idCamionDestination >= 0) {
+			camionDestination = camions.get(idCamionDestination);
+			System.out.println("bouger client");
+		} else {
+			camionDestination = new Camion(CAPACITE_DEFAULT);
+			camions.add(camionDestination);
+			System.out.println("créer camion");
+		}
+
+		repartition.remove(client);
+		if(ancienCamion.getCircuit().size() == 1){ //J'ai un NullPointerException ici, ce qui veut dire que
+			System.out.println("là, je devrais supprimer le camion, normalement.");
+		}
+		ancienCamion.getCircuit().remove(client);
+
+		camionDestination.getCircuit().add(client);
+		repartition.put(client, camionDestination);
+
+		retirerCamionsVides();
 	}
 }

@@ -8,8 +8,8 @@ public class Client {
 	private float tMax;
 	private float quantite;
 	private float tDechargement;
-	private String id;	
-	
+	private String id;
+
 	public Client(String id, Point2D.Double coordonnees, float tMin, float tMax, float quantite, float tDechargement) {
 		super();
 		this.id = id;
@@ -19,18 +19,23 @@ public class Client {
 		this.quantite = quantite;
 		this.tDechargement = tDechargement;
 	}
+
 	public Point2D.Double getCoordonnees() {
 		return coordonnees;
 	}
+
 	public float gettMin() {
 		return tMin;
 	}
+
 	public float gettMax() {
 		return tMax;
 	}
+
 	public float getQuantite() {
 		return quantite;
 	}
+
 	public float gettDechargement() {
 		return tDechargement;
 	}

@@ -34,25 +34,6 @@ public class MainFrame {
 
 	public MainFrame() {
 		choixFichier = new JFileChooser(new File("."));
-		chargerUnMondeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int valeurRetour = choixFichier.showOpenDialog(frame);
-				if (valeurRetour == JFileChooser.APPROVE_OPTION) {
-					fichier = choixFichier.getSelectedFile();
-					chargerMonde();
-					updateSolution();
-				}
-			}
-		});
-		calculerUneSolutionButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				solution.calculerSolution(10, 10, Solution.PREMIER_AMELIORANT); //TODO ajouter des paramètres graphiques
-				updateSolution();
-			}
-		});
-
 		setupMenuBar();
 	}
 
@@ -63,6 +44,9 @@ public class MainFrame {
 		} else {
 			coutSolutionLabel.setText("Pas de solution générée.");
 		}
+
+		System.out.println("solution.valide() = " + solution.valide());
+
 		frame.repaint();
 	}
 
@@ -86,6 +70,27 @@ public class MainFrame {
 		JMenuItem menuItemCalculerUneSolution = new JMenuItem("Calculer une solution");
 		JMenuItem menuItemCreerSolutionUnCamion = new JMenuItem("Créer une solution à un camion");
 		JMenuItem menuItemCreerSolutionPleinDeCamions = new JMenuItem("Créer une solution à un camion par client");
+		JMenuItem menuItemCreerSolutionAleatoire = new JMenuItem("Créer une solution aléatoire");
+
+		menuItemChargerMonde.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int valeurRetour = choixFichier.showOpenDialog(frame);
+				if (valeurRetour == JFileChooser.APPROVE_OPTION) {
+					fichier = choixFichier.getSelectedFile();
+					chargerMonde();
+					updateSolution();
+				}
+			}
+		});
+
+		menuItemCalculerUneSolution.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				solution = solution.calculerSolution(3,10,10);
+				updateSolution();
+			}
+		});
 
 		menuItemCreerSolutionUnCamion.addActionListener(new ActionListener() {
 			@Override
@@ -103,10 +108,19 @@ public class MainFrame {
 			}
 		});
 
+		menuItemCreerSolutionAleatoire.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				solution.random();
+				updateSolution();
+			}
+		});
+
 		menuSolution.add(menuItemChargerMonde);
 		menuSolution.add(menuItemCalculerUneSolution);
 		menuSolution.add(menuItemCreerSolutionUnCamion);
 		menuSolution.add(menuItemCreerSolutionPleinDeCamions);
+		menuSolution.add(menuItemCreerSolutionAleatoire);
 
 		return menuSolution;
 	}
@@ -174,5 +188,6 @@ public class MainFrame {
 
 	private void createUIComponents() {
 		panelmonde = new JPanelMonde();
+		frame.setPreferredSize(new Dimension(700,600));
 	}
 }
