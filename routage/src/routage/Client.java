@@ -34,6 +34,19 @@ public class Client {
 	public float gettDechargement() {
 		return tDechargement;
 	}
-	
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Client client = (Client) o;
+
+		return coordonnees != null ? coordonnees.equals(client.coordonnees) : client.coordonnees == null;
+	}
+
+	@Override
+	public int hashCode() {
+		return coordonnees != null ? coordonnees.hashCode() : 0;
+	}
 }

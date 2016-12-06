@@ -1,16 +1,20 @@
 package routage;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.List;
+import java.util.Random;
 
 public class Camion {
 	private List<Client> circuit;
 	private int capacite;
+	private Color color;
 	
 	public Camion(List<Client> circuit, int capacite) {
 		super();
 		this.circuit = circuit;
 		this.capacite = capacite;
+		this.color = randomColor();
 	}
 
 	public List<Client> getCircuit() {
@@ -31,5 +35,36 @@ public class Camion {
 		}
 		return duree;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Camion camion = (Camion) o;
+
+		if (capacite != camion.capacite) return false;
+		return circuit != null ? circuit.equals(camion.circuit) : camion.circuit == null;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = circuit != null ? circuit.hashCode() : 0;
+		result = 31 * result + capacite;
+		return result;
+	}
+
+	private Color randomColor() {
+		Random rand = new Random();
+		// Will produce only bright / light colours:
+		float r = rand.nextFloat();// / 2f + 0.5f;
+		float g = rand.nextFloat();// / 2f + 0.5f;
+		float b = rand.nextFloat();// / 2f + 0.5f;
+
+		return new Color(r, g, b);
+	}
+
+	public Color getColor() {
+		return color;
+	}
 }
