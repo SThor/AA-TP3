@@ -81,7 +81,7 @@ public class Solution implements Comparable<Solution> {
 
 		// Lecture fichier et creation clients
 		monde = new ArrayList<>();
-		// Decalage de la chaîne "Cap"
+		// Decalage de la chaine "Cap"
 		scanner.next();
 		// Recuperation capacite
 		setCapacite(scanner.nextInt());
@@ -131,11 +131,11 @@ public class Solution implements Comparable<Solution> {
 		this.camions = new ArrayList<>();
 
 		Random rand = new Random();
-		//création d'une liste des clients en ordre aléatoire
+		//creation d'une liste des clients en ordre aleatoire
 		List<Client> clientsAleatoire = new LinkedList<>();
 		clientsAleatoire.addAll(monde);
 		Collections.shuffle(clientsAleatoire);
-		//attribution d'un nombre aléatoire de cette liste à un camion tant qu'on n'a pas fini la liste
+		//attribution d'un nombre aleatoire de cette liste a un camion tant qu'on n'a pas fini la liste
 		int i = 0;
 		while (i < clientsAleatoire.size()) {
 			int circuitLength = rand.nextInt(MAX_DEFAULT_RANDOM_CIRCUIT_LENGTH) + 1;
@@ -168,7 +168,7 @@ public class Solution implements Comparable<Solution> {
 				clientsDesservis.add(client);
 			}
 		}
-		clientsDesservis.add(monde.get(0)); //Ajout du dépôt
+		clientsDesservis.add(monde.get(0)); //Ajout du depot
 		System.err.println("clientsDesservis.size() = " + clientsDesservis.size());
 		boolean tousClientsDesservis = clientsDesservis.containsAll(monde) && monde.containsAll(clientsDesservis);
 		return tousClientsDesservis;
@@ -188,7 +188,7 @@ public class Solution implements Comparable<Solution> {
 			Camion camion = it.next();
 			if (camion.getCircuit().isEmpty()) {
 				it.remove();
-				System.err.println("là je supprime un camion");
+				System.err.println("la je supprime un camion");
 			}
 		}
 	}
@@ -204,13 +204,13 @@ public class Solution implements Comparable<Solution> {
 		} else {
 			camionDestination = new Camion(CAPACITE_DEFAULT);
 			camions.add(camionDestination);
-			System.err.println("créer camion");
+			System.err.println("creer camion");
 		}
 
 		System.err.println("idClient = " + idClient);
 		System.err.println("ancienCamion = " + ancienCamion);
 		if (ancienCamion.getCircuit().size() == 1) { //J'ai un NullPointerException ici, ce qui veut dire que
-			System.err.println("là, je devrais supprimer le camion, normalement.");
+			System.err.println("la, je devrais supprimer le camion, normalement.");
 		}
 		ancienCamion.getCircuit().remove(client);
 		camionDestination.getCircuit().add(client);
@@ -224,7 +224,7 @@ public class Solution implements Comparable<Solution> {
 				return camion;
 			}
 		}
-		System.err.println("Client non trouvé dans les circuits des camions.");
+		System.err.println("Client non trouve dans les circuits des camions.");
 		return null;
 	}
 

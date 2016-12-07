@@ -2,10 +2,10 @@
 # File: routage/Makefile
  
 sourcefiles = \
-Camion.java \
 Client.java \
-Recherche.java \
-Solution.java
+Camion.java \
+Solution.java \
+Recherche.java
  
 classfiles = $(patsubst %.java,$(classpath)/%.class,$(sourcefiles))
  
@@ -20,8 +20,8 @@ all: subblocks $(classfiles)
 subblocks:
  
 $(classpath)/%.class: %.java
-    @mkdir -p $(classpath)
-    javac -d $(classpath) -classpath $(classpath)  $<
+	@mkdir -p $(classpath)
+	javac -d $(classpath) -classpath $(classpath)  $<
  
 clean:
-    rm -f $(classpath)/*.class
+	rm -f $(classpath)/*.class

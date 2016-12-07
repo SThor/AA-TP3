@@ -43,7 +43,7 @@ public class Recherche {
 				break;
 			case PREMIER_AMELIORANT:
 				Solution voisin = genRandomVoisin(solution);
-				while (solution.compareTo(voisin) >= 0) { //tant que le voisin généré n'améliore pas la solution actuelle
+				while (solution.compareTo(voisin) >= 0) { //tant que le voisin genere n'ameliore pas la solution actuelle
 					voisin = genRandomVoisin(solution);
 				}
 				resultat = voisin;

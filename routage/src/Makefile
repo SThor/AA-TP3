@@ -15,11 +15,11 @@ endif
 all: subblocks $(classfiles)
  
 subblocks:
-    cd routage; make
+	cd routage; make
  
 $(classpath)/%.class: %.java
-    @mkdir -p $(classpath)
-    javac -d $(classpath) -classpath $(classpath)  $<
+	@mkdir -p $(classpath)
+	javac -d $(classpath) -classpath $(classpath)  $<
  
 clean:
-    rm -f $(classpath)/*.class
+	rm -f $(classpath)/*.class

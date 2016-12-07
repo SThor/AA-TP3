@@ -1,0 +1,5 @@
+un environnement jdk1.7 minimum est nécessaire pour la compilation et l'exécution du programme.
+J'ai utilisé openjdk, mais java oracle devrait fonctionner aussi.
+
+commande utilisée pour les tests : 
+java -cp class run_nc <arg1> <arg2> > graph.dot
