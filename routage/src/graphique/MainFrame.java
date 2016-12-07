@@ -1,6 +1,7 @@
 package graphique;
 
 import routage.Client;
+import routage.Recherche;
 import routage.Solution;
 
 import javax.swing.*;
@@ -44,9 +45,6 @@ public class MainFrame {
 		} else {
 			coutSolutionLabel.setText("Pas de solution générée.");
 		}
-
-		System.out.println("solution.valide() = " + solution.valide());
-
 		frame.repaint();
 	}
 
@@ -87,7 +85,7 @@ public class MainFrame {
 		menuItemCalculerUneSolution.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				solution = solution.calculerSolution(3,10,10);
+				solution = Recherche.calculerSolution(solution, 2,1000,20);
 				updateSolution();
 			}
 		});
@@ -137,21 +135,21 @@ public class MainFrame {
 		menuItemVoisinAleatoire.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				solution = solution.genRandomVoisin();
+				solution = Recherche.genRandomVoisin(solution);
 				updateSolution();
 			}
 		});
 		menuItemVoisinAjouteCamion.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				solution = solution.genRandomVoisinAjouteCamion();
+				solution = Recherche.genRandomVoisinAjouteCamion(solution);
 				updateSolution();
 			}
 		});
 		menuItemVoisinBougeClient.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				solution = solution.genRandomVoisinBougeClient();
+				solution = Recherche.genRandomVoisinBougeClient(solution);
 				updateSolution();
 			}
 		});

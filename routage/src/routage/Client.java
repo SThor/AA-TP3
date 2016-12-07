@@ -8,6 +8,7 @@ public class Client {
 	private float tMax;
 	private float quantite;
 	private float tDechargement;
+
 	private String id;
 
 	public Client(String id, Point2D.Double coordonnees, float tMin, float tMax, float quantite, float tDechargement) {
@@ -18,6 +19,15 @@ public class Client {
 		this.tMax = tMax;
 		this.quantite = quantite;
 		this.tDechargement = tDechargement;
+	}
+
+	public Client(Client client) {
+		coordonnees = new Point2D.Double(client.coordonnees.x, client.getCoordonnees().y);
+		tMin = client.tMin;
+		tMax = client.tMax;
+		quantite = client.quantite;
+		tDechargement = client.tDechargement;
+		id = "" + client.id;
 	}
 
 	public Point2D.Double getCoordonnees() {
@@ -53,5 +63,9 @@ public class Client {
 	@Override
 	public int hashCode() {
 		return coordonnees != null ? coordonnees.hashCode() : 0;
+	}
+
+	public String getId() {
+		return id;
 	}
 }

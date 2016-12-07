@@ -18,11 +18,20 @@ public class Camion {
 		this.color = randomColor();
 	}
 
-	public Camion(int capacite){
+	public Camion(int capacite) {
 		super();
 		this.circuit = new ArrayList<>();
 		this.capacite = capacite;
 		this.color = randomColor();
+	}
+
+	public Camion(Camion camion) {
+		capacite = camion.capacite;
+		color = randomColor();
+		circuit = new ArrayList<>();
+		for (Client client : camion.circuit) {
+			circuit.add(new Client(client));
+		}
 	}
 
 	public List<Client> getCircuit() {

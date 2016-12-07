@@ -57,12 +57,14 @@ public class JPanelMonde extends JPanel {
 				g2.setColor(DEFAULT_COLOR);
 			}
 			g2.fillOval(x, y, DEFAULT_DIAMETRE, DEFAULT_DIAMETRE);
+			g2.drawString(""+i,x,y);
 		}
 	}
 
 	private void paintSolution() {
 
-		System.out.println("solution.tempsTotalDeParcours() = " + solution.tempsTotalDeParcours());
+		System.err.println("solution.tempsTotalDeParcours() = " + solution.tempsTotalDeParcours());
+		solution.imprimerFichierDot();
 		for (Camion camion : solution.getCamions()) {
 			g2.setColor(camion.getColor());
 			List<Client> circuit = camion.getCircuit();
