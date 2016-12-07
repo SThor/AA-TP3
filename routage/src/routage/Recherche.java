@@ -108,7 +108,7 @@ public class Recherche {
 		for (int i = 1; i < solution.getMonde().size(); i++) {
 			voisins.add(genVoisinAjouteCamion(solution, i));
 		}
-		for (int i = 0; i < solution.getCamions().size(); i++) {
+		for (int i = 1; i < solution.getMonde().size(); i++) {
 			for (int j = 0; j < solution.getCamions().size(); j++) {
 				if (i != j) {
 					voisins.add(genVoisinBougeClient(solution, i, j));
