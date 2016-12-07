@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_routage" default="compile.module.routage">
+  <dirname property="module.routage.basedir" file="${ant.file.module_routage}"/>
+  
+  <property name="module.jdk.home.routage" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.routage" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.routage" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.routage" value="-encoding UTF-8 -source 1.7 -target 1.7 ${compiler.args}"/>
+  
+  <property name="routage.output.dir" value="${module.routage.basedir}/../out/production/routage"/>
+  <property name="routage.testoutput.dir" value="${module.routage.basedir}/../out/test/routage"/>
+  
+  <path id="routage.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="routage.module.production.classpath">
+    <path refid="${module.jdk.classpath.routage}"/>
+  </path>
+  
+  <path id="routage.runtime.production.module.classpath">
+    <pathelement location="${routage.output.dir}"/>
+  </path>
+  
+  <path id="routage.module.classpath">
+    <path refid="${module.jdk.classpath.routage}"/>
+    <pathelement location="${routage.output.dir}"/>
+  </path>
+  
+  <path id="routage.runtime.module.classpath">
+    <pathelement location="${routage.testoutput.dir}"/>
+    <pathelement location="${routage.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.routage">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.routage">
+    <patternset refid="excluded.from.module.routage"/>
+  </patternset>
+  
+  <path id="routage.module.sourcepath">
+    <dirset dir="${module.routage.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.routage" depends="compile.module.routage.production,compile.module.routage.tests" description="Compile module routage"/>
+  
+  <target name="compile.module.routage.production" depends="register.custom.compilers" description="Compile module routage; production classes">
+    <mkdir dir="${routage.output.dir}"/>
+    <javac2 destdir="${routage.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.routage}/javac">
+      <compilerarg line="${compiler.args.routage}"/>
+      <bootclasspath refid="routage.module.bootclasspath"/>
+      <classpath refid="routage.module.production.classpath"/>
+      <src refid="routage.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.routage"/>
+    </javac2>
+    
+    <copy todir="${routage.output.dir}">
+      <fileset dir="${module.routage.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.routage.tests" depends="register.custom.compilers,compile.module.routage.production" description="compile module routage; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.routage" description="cleanup module">
+    <delete dir="${routage.output.dir}"/>
+    <delete dir="${routage.testoutput.dir}"/>
+  </target>
+</project>
